@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>K-Means Simulator</title>
+
+    <meta name="author" content="Thiago Ferreira">
+    <meta name="description" content="K-Means Simulator developed in HTML">
+    <meta name="keywords" content="k-meas, simulation">
+    <meta name="robots" content="index, follow">
+
+    <!-- Vendor -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
+
+    <!-- Application -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body class="d-flex flex-column h-100">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">K-Means Simulator</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar">
+                    <ul class="navbar-nav me-auto">
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="flex-shrink-0">
+
+        <nav class="navbar navbar-expand navbar-light bg-light menubar py-0 my-0">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navbar">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" id="navbarDropdown" data-bs-toggle="dropdown">File</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#modal-import-csv"><i class="fa fa-upload"></i><span>Import
+                                            .CSV</span></a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item dropdown-item-no-click" href="#"><i
+                                            class="fa fa-blank"></i><span>Export</span><i
+                                            class="fa fa-chevron-right float-end mt-1"></i></a>
+                                    <ul class="submenu dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" id="menubar-export-points"><i
+                                                    class="fa fa-blank"></i><span>Points</span></a></li>
+                                        <li><a class="dropdown-item" href="#" id="menubar-export-clusters"><i
+                                                    class="fa fa-blank"></i><span>Clusters</span></a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" id="navbarDropdown" data-bs-toggle="dropdown">Edit</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" id="menubar-clear-all" href="#"><i
+                                            class="fa fa-blank"></i><span>Clear All</span></a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" id="navbarDropdown" data-bs-toggle="dropdown">Insert</a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item dropdown-item-no-click" href="#"><i
+                                            class="fa fa-blank"></i><span>Examples</span><i
+                                            class="fa fa-chevron-right float-end mt-1"></i></a>
+                                    <ul class="submenu dropdown-menu">
+                                        <li><a class="dropdown-item examples" data-file="1" href="#"><i class="fa fa-blank"></i><span>#1</span></a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item random" href="#"><i
+                                            class="fa fa-dice"></i><span>Random</span></a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" id="navbarDropdown" data-bs-toggle="dropdown">Help</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" target="_blank"
+                                        href="https://en.wikipedia.org/wiki/K-means_clustering"><i
+                                            class="fa fa-blank"></i><span>About K-Means</span></a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="toolbar">
+            <div class="container-fluid">
+                <div class="row py-2">
+                    <div class="col">
+                        <div class="btn-toolbar">
+                            <div class="btn-group disable-when-playing me-2 btn-group-move">
+                                <input type="radio" class="btn-check" name="options" id="pointer" autocomplete="off"
+                                    checked>
+                                <label class="btn btn-sm btn-outline-secondary text-center" for="pointer"><i
+                                        class="fa fa-mouse-pointer"></i></label>
+                                <input type="radio" class="btn-check" name="options" id="add-points" autocomplete="off">
+                                <label class="btn btn-sm btn-outline-secondary text-center" for="add-points"><i
+                                        class="fa fa-plus"></i> Points</label>
+                                <input type="radio" class="btn-check" name="options" id="add-clusters"
+                                    autocomplete="off">
+                                <label class="btn btn-sm btn-outline-secondary text-center" for="add-clusters"><i
+                                        class="fa fa-plus"></i> Clusters</label>
+                            </div>
+                            <div class="btn-group disable-when-playing me-2 btn-group-control ">
+                                <button id="step" class="btn btn-sm btn-outline-primary"><i
+                                        class="fa fa-step-forward me-1"></i>Step</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-auto">
+                        <!-- <a class="btn btn-sm btn-success" href=""><i class="fa fa-share-alt me-1"></i>Share</a> -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid mt-2">
+            <div class="row">
+                <div class="col-lg-9 mb-0 mb-3 mb-lg-0">
+                    <div id="canvas" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                </div>
+                <div class="col-lg-3 mb-0 mb-3 mb-lg-0">
+                    <div id="sidebar" class="card">
+                        <div class="card-header">
+                            <ul class="nav nav-tabs card-header-tabs">
+                                <li class="nav-item">
+                                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#parameters"
+                                        data-i18n="parameters">Settings</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body overflow-auto">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="parameters">
+                                    <form id="form-settings">
+                                        <div class="row mb-3">
+                                            <label for="alpha" class="form-label" >X-Axis</label>
+                                            <div class="col-6">
+                                                <label for="x-axis-min" class="form-label">Min</label>
+                                                <input type="number" class="form-control" id="x-axis-min" step="1" value="1" required>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="x-axis-max" class="form-label">Max</label>
+                                                <input type="number" class="form-control" id="x-axis-max" step="1" value="100" required>
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <div class="row mb-3">
+                                            <label for="alpha" class="form-label" >Y-Axis</label>
+                                            <div class="col-6">
+                                                <label for="x-axis-min" class="form-label">Min</label>
+                                                <input type="number" class="form-control" id="y-axis-min" step="1" value="1" required>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="x-axis-max" class="form-label">Max</label>
+                                                <input type="number" class="form-control" id="y-axis-max" step="1" value="100" required>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <button type="submit" class="btn btn-success btn-sm">Update</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- sidebar -->
+                </div>
+            </div>
+        </div>
+        <img id="ant-image" class="d-none" src="img/ant.png" />
+    </main>
+
+    <footer class="footer mt-auto py-2 bg-light">
+        <div class="container-fluid small text-muted">
+            <div class="row">
+                <div class="col me-auto">
+                    <span>Made with <i class="far fa-heart"></i> in JS</span>
+                </div>
+                <div class="col-auto">
+                    <a href="https://github.com/thiagodnf/k-means-simulator" class="text-decoration-none text-muted"
+                        target="_blank">Source Code</a>
+                    <span class="mx-2">|</span>
+                    <a href="#" class="text-decoration-none text-muted flag-icon flag-icon-us"></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal" id="modal-import-csv" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="form-import-csv" action="#">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fa fa-upload me-2"></i>Import .CSV</h5>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">Type</label>
+                            <br />
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="csv-type" id="csv-type-points" value="points" checked>
+                                <label class="form-check-label" for="csv-type-points">Points</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="csv-type" id="csv-type-clusters" value="clusters" >
+                                <label class="form-check-label" for="csv-type-clusters">Clusters</label>
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="csv-file" class="form-label">File</label>
+                            <input class="form-control" type="file" id="csv-file" required>
+                            <small class="form-text">Use a comma to separate values.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Settings</label>
+                            <br />
+                            <div class="form-check ">
+                                <input class="form-check-input" type="checkbox" value="" id="has-header" checked>
+                                <label class="form-check-label" for="has-header">Has Header</label>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Import</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vendor -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/domurl@2.3.4/url.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+    <script src="https://chancejs.com/chance.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.4.0/fabric.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.4/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.messagestore.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.fallbacks.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.language.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.parser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.bidi.min.js"></script>
+
+
+    <!-- Application -->
+    <script src="js/distances/euclidean-distance.js"></script>
+    <script src="js/algorithm/k-means.js"></script>
+    <script src="js/algorithm/point.js"></script>
+    <script src="js/chart.js"></script>
+
+    <!-- Util-->
+    <script src="js/utils/fabricjs-utils.js"></script>
+    <script src="js/utils/normalize-utils.js"></script>
+    <script src="js/utils/random-utils.js"></script>
+    <script src="js/utils/array-utils.js"></script>
+    <script src="js/utils/chart-utils.js"></script>
+    <script src="js/utils/file-utils.js"></script>
+    <script src="js/utils/bootbox-utils.js"></script>
+    <script src="js/utils/generator-utils.js"></script>
+    <script src="js/utils/nearest-neighbour.js"></script>
+
+    <script src="js/aco/subset/all-ants.js"></script>
+    <script src="js/aco/subset/global-best.js"></script>
+
+    <!-- Evaporation and Deposit-->
+    <script src="js/aco/pheromone/local-update/acs-local-update.js"></script>
+    <script src="js/aco/pheromone/global-update/global-update.js"></script>
+    <script src="js/aco/pheromone/global-update/evaporation/full-evaporation.js"></script>
+    <script src="js/aco/pheromone/global-update/deposit/partial-deposit.js"></script>
+    <script src="js/aco/pheromone/global-update/deposit/full-deposit.js"></script>
+
+    <!-- Exploration-->
+    <script src="js/aco/exploration/ant-exploration.js"></script>
+    <script src="js/aco/exploration/pseudo-random-proportional.js"></script>
+    <script src="js/aco/exploration/q-selection.js"></script>
+    <!-- Selection-->
+    <script src="js/aco/selection/ant-selection.js"></script>
+    <script src="js/aco/selection/roulette-wheel.js"></script>
+    <!-- ACO-->
+    <script src="js/aco/aco.js"></script>
+    <script src="js/aco/random-system.js"></script>
+    <script src="js/aco/ant-system.js"></script>
+    <script src="js/aco/ant-colony-system.js"></script>
+    <!-- Model -->
+    <script src="js/aco/model/ant.js"></script>
+    <script src="js/aco/model/node.js"></script>
+    <script src="js/aco/model/environment.js"></script>
+
+    <script src="js/canvas.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>

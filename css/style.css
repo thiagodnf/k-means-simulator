@@ -1,0 +1,104 @@
+body{
+    font-size: .875rem;
+}
+
+canvas{
+    border-radius: .25rem;
+    border: 1px solid rgba(0,0,0,.125);
+}
+
+.dropdown-menu li{
+    font-size: 14px;
+ }
+
+.toolbar{
+    background-color: #fafafa;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.menubar{
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.menubar .nav-item .nav-link{
+    color: #495057;
+}
+
+.menubar .dropdown-item-checkbox span{
+    padding-left: 4px !important;
+}
+
+.menubar .dropdown-item span{
+    padding-left: 10px;
+}
+
+.menubar .dropdown-item-checkbox:hover{
+    cursor: pointer;
+}
+
+.menubar .fa-blank{
+    visibility:hidden !important;
+    max-width: 12px;
+}
+
+main {
+    padding-top: 56px
+}
+
+form label {
+    font-weight: 500 !important;
+    letter-spacing: .02em;
+}
+
+.btn-group-move label{
+    min-width: 36px;
+}
+
+.btn-group-speed label{
+    min-width: 55px;
+}
+
+.btn-group-control button{
+    min-width: 64px;
+}
+
+hr{
+    color: lightgray;
+}
+
+
+
+.form-select {
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+    padding-left: .5rem;
+    font-size: .875rem;
+}
+
+.form-control {
+    min-height: calc(1.5em + .5rem + 2px);
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    border-radius: .2rem;
+}
+
+
+
+@media all and (min-width: 992px) {
+	.dropdown-menu li{ position: relative; 	}
+	.nav-item .submenu{
+		display: none;
+		position: absolute;
+		left:100%; top:-7px;
+	}
+	.nav-item .submenu-left{
+		right:100%; left:auto;
+	}
+	.dropdown-menu > li:hover{ background-color: #f1f1f1 }
+	.dropdown-menu > li:hover > .submenu{ display: block; }
+}
+@media (max-width: 991px) {
+  .dropdown-menu .dropdown-menu{
+      margin-left:0.7rem; margin-right:0.7rem; margin-bottom: .5rem;
+  }
+}
